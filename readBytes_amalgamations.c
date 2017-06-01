@@ -4,13 +4,13 @@
 #include <unistd.h> 
 #include "clearCache.h"
 
-#define NUM_LOOPS 100
+#define NUM_LOOPS 2
 #define CHUNKSIZE 24010000
 
 int readBytes(const char* fileString50, const char* fileString9000){
     FILE *fptr50 = fopen(fileString50, "rb");
     FILE *fptr9000 = fopen(fileString9000, "rb");
-    char* buffer = (char*)malloc(CHUNKSIZE*8);
+    char* buffer = (char*)malloc(CHUNKSIZE*9);
     int bytes_read = 0;
     // int total_bytes = 0;
     // int num_chunks = 0;
@@ -21,11 +21,18 @@ int readBytes(const char* fileString50, const char* fileString9000){
         perror("fopen");
 
     // amalgamation 1 
-    fseek(fptr9000, CHUNKSIZE*8, SEEK_CUR);
-    bytes_read = fread(buffer, 1, CHUNKSIZE*8, fptr50);
-    fseek(fptr50, CHUNKSIZE, SEEK_CUR);
-    bytes_read = fread(buffer, 1, CHUNKSIZE, fptr9000);
-    bytes_read = fread(buffer, 1, CHUNKSIZE*9, fptr50);
+    // fseek(fptr9000, CHUNKSIZE*8, SEEK_CUR);
+    // bytes_read = fread(buffer, 1, CHUNKSIZE*8, fptr50);
+    // // printf("%i\n",bytes_read);
+    // // printf("%i\n\n",bytes_read==CHUNKSIZE*8);
+    // fseek(fptr50, CHUNKSIZE, SEEK_CUR);
+    // bytes_read = fread(buffer, 1, CHUNKSIZE, fptr9000);
+    // // printf("%i\n",bytes_read);
+    // // printf("%i\n\n",bytes_read==CHUNKSIZE);
+    // bytes_read = fread(buffer, 1, CHUNKSIZE*9, fptr50);
+    // printf("%i\n", bytes_read);
+    // printf("%i\n\n\n\n",bytes_read==CHUNKSIZE*9);
+
 
     // amalgamation 2
     // fseek(fptr9000, CHUNKSIZE*8, SEEK_CUR);
@@ -42,13 +49,14 @@ int readBytes(const char* fileString50, const char* fileString9000){
     // bytes_read = fread(buffer, 1, CHUNKSIZE*4, fptr9000);
     // bytes_read = fread(buffer, 1, CHUNKSIZE*7, fptr50);
 
+
     // amalgamation 4
-    // for(int j=0; j<3; j++){
-    //     fseek(fptr9000, CHUNKSIZE*2, SEEK_CUR);
-    //     bytes_read = fread(buffer, 1, CHUNKSIZE*2, fptr50);
-    //     fseek(fptr50, CHUNKSIZE*4, SEEK_CUR);
-    //     bytes_read = fread(buffer, 1, CHUNKSIZE*4, fptr9000);
-    // }
+    for(int j=0; j<3; j++){
+        fseek(fptr9000, CHUNKSIZE*2, SEEK_CUR);
+        bytes_read = fread(buffer, 1, CHUNKSIZE*2, fptr50);
+        fseek(fptr50, CHUNKSIZE*4, SEEK_CUR);
+        bytes_read = fread(buffer, 1, CHUNKSIZE*4, fptr9000);
+    }
     
     // printf("Total Bytes: %i\n\n", total_bytes);
     // printf("Number of Chunks: %i\n\n", num_chunks);

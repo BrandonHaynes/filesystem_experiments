@@ -4,8 +4,7 @@
 #include "clearCache.h"
 
 #define BUFFER_SIZE 1024*1024
-#define NUM_LOOPS 100
-// #define BILLION  1000000000L
+#define NUM_LOOPS 5
 
 int readFile(const char* fileString){
     FILE *fptr = fopen(fileString, "rb");
@@ -24,7 +23,6 @@ int readFile(const char* fileString){
     // total_bytes += bytes_read;
     // printf("Total Bytes: %i\n\n", total_bytes);
 
-
     if(bytes_read < 0)
         perror("fread");
     else if(fclose(fptr) != 0)
@@ -33,33 +31,112 @@ int readFile(const char* fileString){
     return 0;
 }
 
-int readFiles(){
+int amalgamation1(int j){
     char buffer[256];
-    for(int j=0; j<16; j++){
-        for(int i = 0; i < 2; i++){ // max = 18
-            snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
-            readFile(buffer);
-        }
-        for(int i = 2; i < 6; i++){ 
-            snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/%i.hevc", j, i);
-            readFile(buffer);
-        }
-        for(int i = 6; i < 8; i++){ // max = 18
-            snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
-            readFile(buffer);
-        }
-        for(int i = 8; i < 12; i++){ 
-            snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/%i.hevc", j, i);
-            readFile(buffer);
-        }
-         for(int i = 12; i < 14; i++){ // max = 18
-            snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
-            readFile(buffer);
-        }
-        for(int i = 14; i < 18; i++){ 
-            snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/%i.hevc", j, i);
-            readFile(buffer);
-        }
+    for(int i = 0; i < 8; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    for(int i = 8; i < 9; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    for(int i = 9; i < 18; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    return 0;
+}
+
+int amalgamation2(int j){
+    char buffer[256];
+    for(int i = 0; i < 8; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    for(int i = 8; i < 10; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    for(int i = 10; i < 18; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    return 0;
+}
+
+int amalgamation3(int j){
+    char buffer[256];
+    for(int i = 0; i < 7; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    for(int i = 7; i < 11; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    for(int i = 11; i < 18; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    return 0;
+}
+
+int amalgamation4(int j){
+    char buffer[256];
+    for(int i = 0; i < 2; i++){
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    for(int i = 2; i < 6; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    for(int i = 6; i < 8; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    for(int i = 8; i < 12; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+     for(int i = 12; i < 14; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    for(int i = 14; i < 18; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    return 0;
+}
+
+int fifties(int j){
+    char buffer[256];
+    for(int i = 0; i < 18; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    return 0;
+}
+
+int ninethousands(int j){
+    char buffer[256];
+    for(int i = 0; i < 18; i++){ 
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/%i.hevc", j, i);
+        readFile(buffer);
+    }
+    return 0;
+}
+
+int readFiles(){
+    for(int j=0; j<16; j++){ // 1 or 16, for the non-amalgamations
+        // fifties(j);
+        ninethousands(j);
+        // amalgamation1(j);
+        // amalgamation2(j);
+        // amalgamation3(j);
+        // amalgamation4(j);
     }
     return 0;
 }

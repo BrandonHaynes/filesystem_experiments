@@ -4,7 +4,7 @@
 #include <unistd.h> 
 #include "clearCache.h"
 
-#define NUM_LOOPS 100
+#define NUM_LOOPS 5
 #define CHUNKSIZE 24010000
 
 int readBytes(const char* fileString){
@@ -39,8 +39,9 @@ int readBytes(const char* fileString){
 
 int readFiles(){
     char filenameBuffer[256];
-    for(int j=0; j<1; j++){ // max = 16
-        snprintf(filenameBuffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/concatenated_padded_24M", j);
+    for(int j=0; j<1; j++){ // max 16
+        snprintf(filenameBuffer, 256, "/home/ubuntu/inputs/tiles/50/%i/concatenated_padded_24M", j);
+        // snprintf(filenameBuffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/concatenated_padded_24M", j);
         readBytes(filenameBuffer);
     }
     return 0;

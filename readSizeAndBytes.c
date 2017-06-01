@@ -4,7 +4,7 @@
 #include <unistd.h> 
 #include "clearCache.h"
 
-#define NUM_LOOPS 100
+#define NUM_LOOPS 5
 
 int readSizeAndBytes(const char* fileString){
     FILE *fptr = fopen(fileString, "rb");
@@ -45,8 +45,9 @@ int readSizeAndBytes(const char* fileString){
 
 int readFiles(){
     char buffer[256];
-    for(int j=0; j<16; j++){
-        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/concatenated", j);
+    for(int j=0; j<16; j++){ // max 16
+        // snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/concatenated", j);
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/concatenated", j);
         readSizeAndBytes(buffer);
     }
     return 0;
