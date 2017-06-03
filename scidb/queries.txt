@@ -1,0 +1,31 @@
+# Initialization
+
+# AQL
+
+create array blobs<tile:binary>[i=0:575, 1, 0];
+load blobs from '/home/ubuntu/filesystem_experiments/scidb/data.bin' as '(binary)';
+
+# AFL
+
+store(reshape(blobs, <tile:binary>[bitrate=0:1,1,0, time=0:15,1,0, tid=0:17,1,0]), tiles);
+
+#save(tiles, '/home/ubuntu/filesystem_experiments/scidb/bar.bin', -2, '(binary)');
+
+# 320s 18 @ 50kbps, 0 @ 9000kbps
+time iquery -aq "save(filter(tiles,bitrate=0), '/dev/null', -2, '(binary)');" -n
+
+# 320s 0 @ 50kbps, 18 @ 9000kbps
+time iquery -aq "save(filter(tiles,bitrate=1), '/dev/null', -2, '(binary)');" -n
+
+# 320s 17 @ 50kbps, 1 @ 9000kbps
+time iquery -aq "save(filter(tiles,(bitrate=1 and tid=8) or bitrate=0), '/dev/null', -2, '(binary)');" -n
+
+# 320s 16 @ 50kbps, 2 @ 9000kbps
+time iquery -aq "save(filter(tiles,(bitrate=1 and (tid=8 or tid=9)) or bitrate=0), '/dev/null', -2, '(binary)');" -n
+
+# 320s 14 @ 50kbp, 4 @ 9000kbps
+time iquery -aq "save(filter(tiles,(bitrate=1 and (tid>=7 and tid<=10)) or bitrate=0), '/dev/null', -2, '(binary)');" -n
+
+# 320s 6 @ 50kbp, 12 @ 9000kbps
+time iquery -aq "save(filter(tiles,(bitrate=1 and ((tid>=1 and tid<=4) or (tid>=7 and tid<=10) or (tid>=13 and tid<=16))) or bitrate=0), '/dev/null', -2, '(binary)');" -n
+
