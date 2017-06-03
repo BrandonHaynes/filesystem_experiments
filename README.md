@@ -7,13 +7,15 @@ Recent advances in virtual reality (VR) has prompted the development of myriad a
 
 However, applications requiring 360◦ videos produce a need for rapid data streaming and storage at volumes far exceeding 2D videos.  Supporting such high volumes of data requires maximum efficiency to provide the user with a seamless portrayal of the created scene. 
 
-In this article, we compare data storage and retrieval using SciDB, TileDB, and the file system to determine which system allows for the fastest storage and retrieval of video segments of myriad encodings and segmentations.
-
-
+In this article, we compare data storage and retrieval using SciDB, TileDB, and the file system to determine which system allows for the fastest storage and retrieval of video segments of myriad segmentations.
 
 ## Video Data
-Video data is 
-We need to store the video encoded because the size of the unencoded video is up to XX% larger than the unencoded form.
+
+Something about temporally segmented videos.
+
+Something about temporally *and* spatially segmented videos.
+
+We decided to run our experiments on HEVC-encoded video, as the size of the unencoded video is up to XX% larger than the encoded form.  Another possible format is HEVC-encoded video MPEG-4 muxed as DASH-compatible fragments, which would allow us to treat the MPEG-4 metadata as an index and evaluate its use in improving query performance.  However, investigating that experiment was beyond the scope of this project.
 
 ## Systems Overview
 We investigated data storage and retrieval on the file system, as well as two array-based database management systems: [SciDB](http://www.paradigm4.com/try_scidb/) and [TileDB](http://istc-bigdata.org/tiledb/).  We chose to focus on array-based database systems, as they allow easy storage and retrieval of particular dimensions and ranges.  Their query languages are also well-suited to the kinds of queries needed to process video data for VR applications.
