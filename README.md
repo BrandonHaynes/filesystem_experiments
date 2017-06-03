@@ -40,13 +40,15 @@ To compare the performance of all three of our systems, we wrote scripts to read
 5. Streaming of all tiles corresponding to a specific video, ordered by coordinate and time
 
 ## Results
-TileDB was fastest for all experiments.
+We found shit.
 
 ### Experiment 1:
 ![Storage and retrieval of videos for various temporal segmentation sizes](images/examplegraph.jpeg)
 
 ### Experiment 2:
 ![Storage and retrieval of tiles for various temporal and spatial segmentation sizes](images/examplegraph.jpeg)
+
+TileDB is fast on smaller blob sizes but cannot handle larger blob sizes. <we need to define blobs>
 
 ### Experiment 3:
 ![Retrieval of all tiles corresponding to a specific video at a single timestamp](images/examplegraph.jpeg)
