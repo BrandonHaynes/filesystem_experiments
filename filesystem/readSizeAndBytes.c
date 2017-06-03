@@ -5,8 +5,27 @@
 #include "clearCache.h"
 
 #define NUM_LOOPS 5
+#define BUFFER_SIZE 1024*1024
 
-int readSizeAndBytes(const char* fileString){
+int readRandomTile(int time){
+    int random_tile = rand() % 18;
+    char fileName[256];
+    snprintf(fileName, 256, "/home/ubuntu/inputs/tiles/9000/%i/%i.hevc", time, random_tile);
+    
+    FILE *fptr = fopen(fileName, "rb");
+    char buffer[BUFFER_SIZE];
+    int bytes_read = 0;
+    while((bytes_read = fread(buffer, 1, BUFFER_SIZE, fptr)) == BUFFER_SIZE);
+
+    if(bytes_read < 0)
+        perror("fread");
+    else if(fclose(fptr) != 0)
+        perror("fclose");
+
+    return 0;
+}
+
+int readSizeAndBytes(const char* fileString, int time){
     FILE *fptr = fopen(fileString, "rb");
     int read_file_size;
     int size_read;
@@ -31,6 +50,10 @@ int readSizeAndBytes(const char* fileString){
             break;
     }
 
+    for(int numRandom = 0; numRandom < 12; numRandom++){
+        readRandomTile(time);
+    }
+    
     // printf("Number of Files Read: %i\n", num_files);
 
     if(bytes_read < 0)
@@ -46,9 +69,9 @@ int readSizeAndBytes(const char* fileString){
 int readFiles(){
     char buffer[256];
     for(int j=0; j<16; j++){ // max 16
-        // snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/concatenated", j);
-        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/concatenated", j);
-        readSizeAndBytes(buffer);
+        snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/50/%i/concatenated", j);
+        // snprintf(buffer, 256, "/home/ubuntu/inputs/tiles/9000/%i/concatenated", j);
+        readSizeAndBytes(buffer, j);
     }
     return 0;
 }

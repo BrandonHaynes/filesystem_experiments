@@ -4,7 +4,7 @@
 #include <unistd.h> 
 #include "clearCache.h"
 
-#define NUM_LOOPS 50
+#define NUM_LOOPS 5
 
 int readSizeAndBytes(const char* fileString50, const char* fileString9000){
     FILE *fptr50 = fopen(fileString50, "rb");
@@ -23,11 +23,17 @@ int readSizeAndBytes(const char* fileString50, const char* fileString9000){
     size_read_9000 = fread(&read_file_size_9000, 4, 1, fptr9000);
     while(size_read_50 == 1 && size_read_9000 == 1){
         // printf("Size of file %i: %i\n", (num_files+1), read_file_size);
+
         // if( (num_files < 8  || num_files > 8) ){ // amalgamation 1 
-            // if( (num_files < 8  || num_files > 9) ){ // amalgamation 2
-            // if( (num_files < 7  || num_files > 10) ){  // amalgamation 3
-        if( (num_files > -1  && num_files < 2) || (num_files > 5 && num_files < 8) 
-            || (num_files > 11 && num_files < 14) ){ // amalgamation 4
+
+        // if( (num_files < 8  || num_files > 9) ){ // amalgamation 2
+
+        if( (num_files < 7  || num_files > 10) ){  // amalgamation 3
+
+        // if( (num_files > -1  && num_files < 2) || (num_files > 5 && num_files < 8) 
+        //     || (num_files > 11 && num_files < 14) ){ // amalgamation 4
+
+
             char* buffer = (char*)malloc(read_file_size_50);
             bytes_read = fread(buffer, 1, read_file_size_50, fptr50);
             free(buffer);
@@ -44,7 +50,6 @@ int readSizeAndBytes(const char* fileString50, const char* fileString9000){
         }
 
         else{
-            // printf("here");
             char* buffer = (char*)malloc(read_file_size_9000);
             bytes_read = fread(buffer, 1, read_file_size_9000, fptr9000);
             free(buffer);
@@ -60,7 +65,7 @@ int readSizeAndBytes(const char* fileString50, const char* fileString9000){
                 break;
         }
         
-        // num_files++;
+        num_files++;
         
         // printf("Bytes read: %i\n", bytes_read);
         // 
