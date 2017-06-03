@@ -1,11 +1,11 @@
 # Benchmarking Array-Based Database Systems
-> I'm not sure we actually want that as our title?  Doesn't even mention the file system
+> I'm not sure we actually want that as our title?  Doesn't even mention the file system.  Or VR
 
 by Brandon Haynes and Jessica Schroeder
 
-Recent advances in virtual reality (VR) 
+Recent advances in virtual reality (VR) has prompted the development of myriad applications, from gaming and entertainment to education and scientific visualization.  Spherical panoramic VR videos (a.k.a. *360◦ videos*) has become increasingly popular in many of these applications.  360◦ videos allow the user to view the portrayed scene from any angle.  Such videos allow for a truly immersive experience, as it allows the user to observe the scene as they would observe their surroundings in their everyday life.
 
-Recent interest in virtual reality (VR) applications, particularly those featuring spherical panoramic VR videos (a.k.a. *360◦ videos*), has produced a need for rapid data streaming and storage at volumes far exceeding 2D videos.  Supporting such high volumes of data requires maximum efficiency to provide the user with a seamless portrayal of 
+However, applications requiring 360◦ videos produce a need for rapid data streaming and storage at volumes far exceeding 2D videos.  Supporting such high volumes of data requires maximum efficiency to provide the user with a seamless portrayal of the created scene. 
 
 In this article, we compare data storage and retrieval using SciDB, TileDB, and the file system to determine which system allows for the fastest storage and retrieval of video segments of myriad encodings and segmentations.
 
@@ -49,10 +49,10 @@ TileDB was fastest for all experiments.
 ![Storage and retrieval of tiles for various temporal and spatial segmentation sizes](images/examplegraph.jpeg)
 
 ### Experiment 3:
-![Retrieval of all tiles corresponding to a specific video at a single timestamp ](images/examplegraph.jpeg)
+![Retrieval of all tiles corresponding to a specific video at a single timestamp](images/examplegraph.jpeg)
 
 ### Experiment 4:
-![Retrieval of all tiles corresponding to a specific video between two timestamps ](images/examplegraph.jpeg)
+![Retrieval of all tiles corresponding to a specific video between two timestamps](images/examplegraph.jpeg)
 
 ### Experiment 5:
 ![Streaming of all tiles corresponding to a specific video, ordered by coordinate and time](images/examplegraph.jpeg)
