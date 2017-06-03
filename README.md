@@ -31,7 +31,7 @@ TileDB is a new array-based database management system that is currently used by
 
 
 ## Experiments
-To compare the performance of all three of our systems, we wrote scripts to read from and write to the file system and TileDB (in C) SciDB (in AFL).  The experiments we performed were: 
+To compare the performance of all three of our systems, we wrote scripts to read from and write to the file system and TileDB (in C) SciDB (in AFL).  We repeated all experiments at least 5 times, clearing the cache between experiments to avoid any confounds.  The experiments we performed were: 
 
 1. Storage and retrieval of videos for various temporal segmentation sizes
 2. Storage and retrieval of tiles for various temporal and spatial segmentation sizes
