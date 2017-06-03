@@ -15,10 +15,10 @@ In this article, we compare data storage and retrieval using SciDB, TileDB, and 
 Video data is 
 We need to store the video encoded because the size of the unencoded video is up to XX% larger than the unencoded form.
 
-##Systems Overview
+## Systems Overview
 We investigated data storage and retrieval on the file system, as well as two array-based database management systems: [SciDB](http://www.paradigm4.com/try_scidb/) and [TileDB](http://istc-bigdata.org/tiledb/).  We chose to focus on array-based database systems, as they allow easy storage and retrieval of particular dimensions and ranges.  Their query languages are also well-suited to the kinds of queries needed to process video data for VR applications.
 
-###File System
+### File System
 By far the easiest system to use to store and retrieve video data is the file system.  Reading and writing binary files is relatively easy using simple C scripts, so if the file system had been comparable to the database systems, it would have been the clear choice in terms of ease of use.
 
 **SciDB**
