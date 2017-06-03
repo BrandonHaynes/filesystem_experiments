@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -std=gnu99
 
-all: readFile readBytes readSizeAndBytes readSizeAndBytes_amalgamations readBytes_amalgamations
+all: readFile readBytes readSizeAndBytes readSizeAndBytes_amalgamations readBytes_amalgamations measureThroughput
 
 readFile:
 	$(CC) $(CFLAGS) -o readFile readFile.c clearCache.c
@@ -17,3 +17,6 @@ readSizeAndBytes_amalgamations:
 
 readBytes_amalgamations: 
 	$(CC) $(CFLAGS) -o readBytes_amalgamations readBytes_amalgamations.c clearCache.c
+
+measureThroughput:
+	$(CC) $(CFLAGS) -o measureThroughput measureThroughput.c clearCache.c

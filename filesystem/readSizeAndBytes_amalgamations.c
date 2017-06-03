@@ -4,7 +4,7 @@
 #include <unistd.h> 
 #include "clearCache.h"
 
-#define NUM_LOOPS 5
+#define NUM_LOOPS 60
 
 int readSizeAndBytes(const char* fileString50, const char* fileString9000){
     FILE *fptr50 = fopen(fileString50, "rb");
@@ -101,6 +101,7 @@ int main(int argc, char *argv[]){
     clock_t start, end, total ={0};
     // if(argc != 2)
     //     perror("Program requires the filename as input");
+
 
     for(int i=0; i<NUM_LOOPS; i++){
         start = clock();

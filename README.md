@@ -1,5 +1,5 @@
 # Benchmarking Array-Based Database Systems
-> I'm not sure we actually want that as our title?  Doesn't even mention the file system.  Or VR
+> I'm not sure we actually want that as our title?  Doesn't even mention the file system.  Or VR.
 
 by Brandon Haynes and Jessica Schroeder
 
@@ -31,35 +31,54 @@ TileDB is a new array-based database management system that is currently used by
 
 
 ## Experiments
-To compare the performance of all three of our systems, we wrote scripts to read from and write to the file system and TileDB (in C) SciDB (in AFL).  We repeated all experiments at least 5 times, clearing the cache between experiments to avoid any confounds.  The experiments we performed were: 
+To compare the performance of all three of our systems, we wrote scripts to read from and write to the file system and TileDB (in C) SciDB (in AFL).  We averaged the performance over at least 5 repetitions of the experiment for each system, clearing the cache between experiments to avoid any confounds.  
 
-1. Storage and retrieval of videos for various temporal segmentation sizes
-2. Storage and retrieval of tiles for various temporal and spatial segmentation sizes
-3. Retrieval of all tiles corresponding to a specific video at a single timestamp 
-4. Retrieval of all tiles corresponding to a specific video between two timestamps 
-5. Streaming of all tiles corresponding to a specific video, ordered by coordinate and time
+We examined TileDB both using its default storage, where it stores single files ('TileDB' in our graphs), and using overflow pages, where we distribute large files and use pointers to the remaining data rather than storing all data in one chunk ('TileDB Overflow').  For the file system, we investigated reading files when each tile is a separate file ('FS Separate'); reading files where the individual tiles were combined into a single file, separated by integer representations of the size of each file ('FS Combined'); reading files where the entire file containing all tiles at 50 megabits per second was read, along with random tiles at 9000 megabits per second ('FS Overflow'); and reading files where individual tiles were combined into a single file and padded to be equivalent sizes ('FS Padded').  SciDB does not have an option for overflow pages, so we used it with its normal chunking method ('SciDB').
+
+The experiments we performed were: 
+
+1. Reading tiles of different bitrates
+2. Writing tiles of different bitrates 
+3. Throughput of 9mbps tiles
 
 ## Results
-We found shit.
+Overall, TileDB seems to be the most efficient method for storage and retrieval of 360◦ video data.  We detail the results of our three experiments below.
 
 ### Experiment 1:
-![Storage and retrieval of videos for various temporal segmentation sizes](images/examplegraph.jpeg)
+The first experiment was looking at reading tiles of different bitrates.  For the graphs below, the y axis corresponds to the time in seconds, and the x axis corresponds to the number of files at each of two bitrates (50kbps and 9mbps).
+
+![Reading Tiles of Different Bitrates: All Systems](images/reading_Full.png)
+
+As you can see, SciDB and the file system with the padded file were the least efficient for reading tiles by far.  We therefore eliminated those results to view the rest of the systems:
+
+![Reading Tiles of Different Bitrates: Faster Systems](images/reading_Truncated.png)
+
+Here, we can see that TileDB using overflow pages seems to perform the best for all combinations of bitrates.  TileDB on its own, performed comparatively poorly, likely because video files are larger than it’s configured to handle.  The filesystem did best when each tile was stored separately, though that was still slower than TileDB using overflow pages.  Interestingly, the filesystem combined method, where specific tiles were read from single files, performed less well than the filesystem overflow method, where the entire set of tiles at 50 kilobits per second were read along with random single files at 9 megabits per second.  The time it took to scan through the file and only read the relevant tiles therefore exceeded the time it took to just read the entire file, for the 50kbps tiles.
+
 
 ### Experiment 2:
-![Storage and retrieval of tiles for various temporal and spatial segmentation sizes](images/examplegraph.jpeg)
+Next, we looked at writing tiles of different bitrates using our different systems.  Again, for the graphs below, the y axis corresponds to the time in seconds, and the x axis corresponds to the number of files at each of two bitrates (50kbps and 9mbps).
 
-TileDB is fast on smaller blob sizes but cannot handle larger blob sizes. <we need to define blobs>
+![Writing Tiles of Different Bitrates: All Systems](images/writing_Full.png)
+
+<talk about results when we have them>
+
+![Writing Tiles of Different Bitrates: Faster Systems](images/writing_Truncated.png)
+
+<talk about results when we have them>
 
 ### Experiment 3:
-![Retrieval of all tiles corresponding to a specific video at a single timestamp](images/examplegraph.jpeg)
+Finally, we looked at the throughput of the 9mbps tiles.  Here, the y axis is the throughput in tiles per second.
 
-### Experiment 4:
-![Retrieval of all tiles corresponding to a specific video between two timestamps](images/examplegraph.jpeg)
+![Throughput of 9mbps Tiles](images/throughput.png)
 
-### Experiment 5:
-![Streaming of all tiles corresponding to a specific video, ordered by coordinate and time](images/examplegraph.jpeg)
 
 ## Conclusions 
+We found that SciDB is less efficient by far than either TileDB or the file system, so should likely not be used for storing and retrieving data.  However, TileDB using overflow pages was faster than the file system.
+
+One thing to keep in mind is that we could have further optimized the file system tests; had we done so, we probably would have matched TileDB in terms of efficiency.  However, doing so would have required much more time, to the point that TileDB would then likely be the better choice in terms of usability. 
+
+ So overall, TileDB is likely a good choice to support storage and retrieval of 360◦ video files.
 
 
 

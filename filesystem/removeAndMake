@@ -3,4 +3,5 @@ rm readFile
 rm readSizeAndBytes
 rm readSizeAndBytes_amalgamations
 rm readBytes_amalgamations
+rm measureThroughput
 make

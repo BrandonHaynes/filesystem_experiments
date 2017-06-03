@@ -4,7 +4,7 @@
 #include "clearCache.h"
 
 #define BUFFER_SIZE 1024*1024
-#define NUM_LOOPS 5
+#define NUM_LOOPS 60
 
 int readFile(const char* fileString){
     FILE *fptr = fopen(fileString, "rb");
@@ -129,10 +129,11 @@ int ninethousands(int j){
     return 0;
 }
 
+
 int readFiles(){
     for(int j=0; j<16; j++){ // 1 or 16, for the non-amalgamations
         // fifties(j);
-        ninethousands(j);
+        // ninethousands(j);
         // amalgamation1(j);
         // amalgamation2(j);
         // amalgamation3(j);
