@@ -1,21 +1,20 @@
 # Array-Based Database System Performance for Virtual Reality Video Storage
 #### Brandon Haynes & Jessica Schroeder
 
-Recent advances in virtual reality (VR) has prompted the development of new applications ranging from gaming and entertainment to education and scientific visualization.  Spherical panoramic VR videos (a.k.a. *360 videos*) has become increasingly popular in many of these applications.  360 videos allow the user to view a spherical video scene from any angle.  Such videos allow for a truly immersive experience, as it allows the user to observe the scene as they would observe their surroundings in their everyday life.
+Recent advances in virtual reality (VR) has prompted the development of new applications ranging from gaming and entertainment to education and scientific visualization.  Spherical panoramic VR videos (a.k.a. *360 videos*) has become increasingly popular in many of these applications.  360 videos allow the user to view a spherical video scene from any angle.  Such videos allow for a truly immersive experience, as they allow the user to observe the scene as they would observe their surroundings in their everyday life.
 
 However, applications requiring 360 videos produce a need for rapid data streaming and storage at volumes far exceeding those found in 2D videos.  Supporting such high volumes of data requires maximum efficiency to provide the user with a seamless, high-quality portrayal of the created scene. 
 
-In this article, we compare data storage and retrieval performance using TileDB, SciDB, and the file system to determine which strategy provides the fastest storage and retrieval for video segments.  
+In this article, we compare data storage and retrieval performance using TileDB, SciDB, and the file system to determine which strategy provides the fastest storage and retrieval for video segments.
 
 ## Video Data
 
-We decomposed each video used in the experiments into uniformally-sized segments, as is done in the [VisualCloud](http://visualcloud.cs.washington.edu) DBMS.  We then temporally decomposed each segment into 20-second *tiles*.  Each tile is treated as an opaque binary value when read from or written to the target database system.
+We decomposed each video used in the experiments into uniformally-sized segments, as is done in the [VisualCloud DBMS](http://visualcloud.cs.washington.edu).  We then temporally decomposed each segment into 20-second *tiles*.  Each tile is treated as an opaque binary value when read from or written to the target database system.
 
-We elected to leave the tiles as HEVC-encoded video, since the size of the unencoded video is 
-Each  experiments on HEVC-encoded video, as the size of the unencoded video is up to 250%+ larger than its encoded counterpart.  An alternate format is HEVC-encoded video MPEG-4 pre-muxed as DASH-compatible fragments, which would allow us to use the initialization segment as an index and potentially improving query performance.  However, investigating that experiment was beyond the scope of this project.
+**We elected to leave the tiles as HEVC-encoded video, since the size of the unencoded video is Each  experiments on HEVC-encoded video, as the size of the unencoded video is up to 250%+ larger than its encoded counterpart.  An alternate format is HEVC-encoded video MPEG-4 pre-muxed as DASH-compatible fragments, which would allow us to use the initialization segment as an index and potentially improving query performance.  However, investigating that experiment was beyond the scope of this project.**
 
 ## Systems Overview
-We investigated data storage and retrieval on the file system, as well as two array-based database management systems: [SciDB](http://www.paradigm4.com/try_scidb/) and [TileDB](http://istc-bigdata.org/tiledb/).  We chose to focus on array-based database systems, as they allow easy storage and retrieval of particular dimensions and ranges.  Their query languages are also well-suited to the workload needed to process video data for VR applications (e.g., streaming video by time and point queries for augmented reality).
+We investigated data storage and retrieval on the file system, as well as two array-based database management systems: [SciDB](http://www.paradigm4.com/try_scidb/) and [TileDB](http://istc-bigdata.org/tiledb/).  We chose to focus on array-based database systems because they allow easy storage and retrieval of particular dimensions and ranges.  Their query languages are also well-suited to the workload needed to process video data for VR applications (e.g., streaming video by time and point queries for augmented reality).
 
 ### File System
 By far the easiest system to use to store and retrieve video data is the file system.  Reading and writing binary files is relatively easy using simple C scripts, so if the file system had been comparable to the database systems, it would have been the clear choice in terms of ease of use.
@@ -39,9 +38,9 @@ TileDB is a new array-based database management system that is currently used by
 
 
 ## Experiments
-To compare the performance of all three of our systems, we wrote scripts to read from and write to the file system (in C) and TileDB (in C) SciDB (in AFL).  We averaged the performance over at least 5 repetitions for each system, clearing the file cache between experiments to minimize any confounding factors associated with the operating system.  
+To compare the performance of all three of our systems, we wrote scripts to read from and write to the file system (in C), TileDB (in C), and SciDB (in AFL).  We averaged the performance over at least 5 repetitions for each system, clearing the file cache between experiments to minimize any confounding factors associated with the operating system.  
 
-We examined TileDB both using its default storage method and one using overflow pages, where we modified the DBMS to use external files for large binary values (>10mb) and inserted pointers to these files inside TileDB ('TileDB Overflow').  
+We examined TileDB both using its default storage method ('TileDB' in our graphs below) and one using overflow pages, where we modified the DBMS to use external files for large binary values (>10mb) and inserted pointers to these files inside TileDB ('TileDB Overflow').  
 
 As described, for the file system we investigated reading files when each tile is a separate file ('FS Separate'); reading files where the individual tiles were combined into a single file, separated by integer representations of the size of each file ('FS Combined'); reading files where the entire file containing all tiles at 50 megabits per second was read, along with random tiles at 9000 megabits per second ('FS Overflow'); and reading files where individual tiles were combined into a single file and padded to be equivalent sizes ('FS Padded').  
 
@@ -54,7 +53,7 @@ The experiments we performed were:
 3. Throughput of 9mbps tiles
 
 ## Results
-Overall, TileDB seems to be the most efficient method for storage and retrieval of 360 video data.  We detail the results of our three experiments below.
+Overall, TileDB with overflow pages seems to be the most efficient method for storage of 360 video data, but the file system is more efficient in terms of writing and throughput of tiles.  We detail the results of our three experiments below.
 
 ### Experiment 1:
 The first experiment was looking at reading tiles of different bitrates.  For the graphs below, the y axis corresponds to the time in seconds, and the x axis corresponds to the number of files at each of two bitrates (50kbps and 9mbps).
@@ -73,19 +72,23 @@ Next, we looked at writing tiles of different bitrates using our different syste
 
 ![Writing Tiles of Different Bitrates: All Systems](images/writing_Full.png)
 
-<talk about results when we have them>
+Again SciDB totally dominates the write times, especially for larger bitrates.  We again eliminated those results to view the other systems:
 
 ![Writing Tiles of Different Bitrates: Faster Systems](images/writing_Truncated.png)
 
-<talk about results when we have them>
+When it comes to writing video tiles, the file system seems to be the fastest at all tile sizes we tested. TileDB using overflow pages again significantly outperforms TileDB without them, but was still less efficient than the file system.
 
 ### Experiment 3:
 Finally, we looked at the throughput of the 9mbps tiles.  Here, the y axis is the throughput in tiles per second.
 
 ![Throughput of 9mbps Tiles](images/throughput.png)
 
+The file system had the highest throughput when reading tiles stored in individual files.  TileDB with overflow pages again outperformed TileDB without them, and both were more significant than the other methods involving the file system.  SciDB had the lowest throughput by far.
+
 
 ## Conclusions 
-We found that SciDB is less efficient by far than either TileDB or the file system, so should likely not be used for storing and retrieving data.  However, TileDB using overflow pages was faster than the file system.
+We found that SciDB is less efficient by far than either TileDB or the file system, so should likely not be used for storing and retrieving data.  TileDB using overflow pages was consistently more efficient than TileDB without them, but the file system outperformed TileDB in general in terms of both writing and throughput. 
 
-One thing to keep in mind is that we could have further optimized the file system tests; had we done so, we probably would have matched TileDB in terms of efficiency.  However, doing so would have required much more time, to the point that TileDB would then likely be the better choice in terms of usability. 
+One thing to keep in mind is that we could have further optimized the file system read tests; had we done so, we probably would have matched TileDB in terms of efficiency.  However, doing so would have required much more time, to the point that TileDB would then likely be the better choice in terms of usability. 
+
+Overall, both TileDB using overflow pages and the file system seem to be reasonable choices for storing and retrieving 360 video data.
