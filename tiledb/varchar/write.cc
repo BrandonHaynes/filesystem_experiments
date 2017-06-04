@@ -22,7 +22,7 @@ int main() {
   tiledb_array_init(
       context,                                   // Context
       &array,                                    // Array object
-      "workspace/brandon/videos50",                // Array name
+      "workspace/brandon/videos9000",                // Array name
       TILEDB_ARRAY_WRITE,                        // Mode
       NULL,                                      // Entire domain
       NULL,                                      // All attributes
@@ -50,7 +50,7 @@ for(size_t j = 0; j < 16; j++)
 
   for(size_t i = 0; i < 18; i++)
   {
-  snprintf(filename, 256, "/home/ubuntu/inputs/tiles/50/%ld/%ld.hevc", j, i);
+  snprintf(filename, 256, "/home/ubuntu/inputs/tiles/9000/%ld/%ld.hevc", j, i);
   read(filename, &current);
   //printf("%d %d size: %ld\n", j, i, (current - data) - prev);
   offsets[i + 1] = current - data;
