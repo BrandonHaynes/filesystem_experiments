@@ -53,7 +53,7 @@ The experiments we performed were:
 3. Throughput of 9mbps tiles
 
 ## Results
-Overall, TileDB with overflow pages seems to be the most efficient method for storage of 360 video data, but the file system is more efficient in terms of writing and throughput of tiles.  We detail the results of our three experiments below.
+Overall, TileDB with overflow pages seems to be the most efficient method for reading of 360 video data, but the file system is more efficient in terms of writing and throughput of tiles.  We detail the results of our three experiments below.
 
 ### Experiment 1:
 The first experiment was looking at reading tiles of different bitrates.  For the graphs below, the y axis corresponds to the time in seconds, and the x axis corresponds to the number of files at each of two bitrates (50kbps and 9mbps).
@@ -64,8 +64,9 @@ As you can see, SciDB and the file system with the padded file were the least ef
 
 ![Reading Tiles of Different Bitrates: Faster Systems](images/reading_Truncated.png)
 
-Here, we can see that TileDB using overflow pages seems to perform the best for all combinations of bitrates.  TileDB on its own, performed comparatively poorly, likely because video files are larger than its configured to handle.  The file system did best when each tile was stored separately, though that was still slower than TileDB using overflow pages.  Interestingly, the file system combined method, where specific tiles were read from single files, performed less well than the file system overflow method, where the entire set of tiles at 50 kilobits per second were read along with random single files at 9 megabits per second.  The time it took to scan through the file and only read the relevant tiles therefore exceeded the time it took to just read the entire file, for the 50kbps tiles.
+Here, we can see that TileDB using overflow pages seems to perform the best for all combinations of bitrates, especially the larger ones.  TileDB without overflow pages performed comparatively poorly, likely because video files are larger than its configured to handle.
 
+The file system did best when each tile was stored in a separate file.  Interestingly, the file system combined method, where specific tiles of the same quality were read from single files, performed less well than the file system overflow method, where the entire set of low quality tiles were read along with random high quality tiles.  The time it took to scan through the file and only read the relevant low quality tiles therefore must have exceeded the time it took to just read all low quality files all along with the necessary high quality tiles.
 
 ### Experiment 2:
 Next, we looked at writing tiles of different bitrates using our different systems.  Again, for the graphs below, the y axis corresponds to the time in seconds, and the x axis corresponds to the number of files at each of two bitrates (50kbps and 9mbps).
@@ -76,18 +77,17 @@ Again SciDB totally dominates the write times, especially for larger bitrates.  
 
 ![Writing Tiles of Different Bitrates: Faster Systems](images/writing_Truncated.png)
 
-When it comes to writing video tiles, the file system seems to be the fastest at all tile sizes we tested. TileDB using overflow pages again significantly outperforms TileDB without them, but was still less efficient than the file system.
+When it comes to writing video tiles, the file system seems to be the fastest at all tile sizes we tested. TileDB using overflow pages again significantly outperforms TileDB without them, but both methods were less efficient than the file system.
 
 ### Experiment 3:
 Finally, we looked at the throughput of the 9mbps tiles.  Here, the y axis is the throughput in tiles per second.
 
 ![Throughput of 9mbps Tiles](images/throughput.png)
 
-The file system had the highest throughput when reading tiles stored in individual files.  TileDB with overflow pages again outperformed TileDB without them, and both were more significant than the other methods involving the file system.  SciDB had the lowest throughput by far.
-
+The file system had the highest throughput when reading tiles stored in individual files.  TileDB without overflow pages slightly outperformed TileDB with them in this case, and both were more efficient than the file system methods.  SciDB had the lowest throughput by far.
 
 ## Conclusions 
-We found that SciDB is less efficient by far than either TileDB or the file system, so should likely not be used for storing and retrieving data.  TileDB using overflow pages was consistently more efficient than TileDB without them, but the file system outperformed TileDB in general in terms of both writing and throughput. 
+We found that SciDB is less efficient by far than either TileDB or the file system, so should likely not be used for storing and retrieving data.  ileDB using overflow pages outperformed TileDB without them for writing and reading, but was slightly less efficient in terms of throughput.  The file system using tiles stored in individual files was more efficient than any other method in terms of writing and throughput.
 
 One thing to keep in mind is that we could have further optimized the file system read tests; had we done so, we probably would have matched TileDB in terms of efficiency.  However, doing so would have required much more time, to the point that TileDB would then likely be the better choice in terms of usability. 
 
