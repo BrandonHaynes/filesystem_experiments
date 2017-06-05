@@ -109,9 +109,10 @@ void writeSizes(int segment, char *data, size_t *offsets, size_t *buffer_sizes)
 }
 
 
-void read0_18(TileDB_CTX* context)
+clock_t read0_18(TileDB_CTX* context)
 {
 //read(context, "workspace/brandon/videos9000", NULL);
+return 0;
 }
 
 clock_t read18_0(TileDB_CTX* context)
