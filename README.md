@@ -70,7 +70,7 @@ As you can see, SciDB and the file system with the padded file were the least ef
 
 Here, we can see that TileDB using overflow pages seems to perform the best for all combinations of bitrates, especially the larger ones.  TileDB without overflow pages performed comparatively poorly, likely because video files are larger than it was designed to store in each attribute.
 
-The file system did best when each tile was stored in a separate file.  Interestingly, the file system combined method, where specific tiles of the same quality were read from single files, performed less well than the file system overflow method, where the entire set of low quality tiles were read along with random high quality tiles.  The time it took to scan through the file and only read the relevant low quality tiles therefore must have exceeded the time it took to just read all low quality files all along with the necessary high quality tiles.
+The file system did best when each tile was stored in a separate file.  Interestingly, the file system combined method, where specific tiles of the same quality were read from single files, performed less well than the file system overflow method, where the entire set of low-quality tiles were read along with random high-quality tiles.  The time it took to scan through the file and only read the relevant low-quality tiles therefore must have exceeded the time it took to just read all low-quality tiles all along with the necessary high-quality tiles.
 
 ### Experiment 2:
 Next, we looked at writing tiles of different bitrates using our different systems.  Again, for the graphs below, the y axis corresponds to the time in seconds, and the x axis corresponds to the number of files at each of two bitrates (50kbps and 9mbps).
