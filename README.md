@@ -11,7 +11,7 @@ In this article, we compare data storage and retrieval performance using TileDB,
 
 We decomposed each video used in the experiments into uniformally-sized segments, as is done in the [VisualCloud DBMS](http://visualcloud.cs.washington.edu).  We then temporally decomposed each segment into 20-second *tiles*.  Each tile is treated as an opaque binary value when read from or written to the target database system.
 
-**We elected to leave the tiles as HEVC-encoded video, since the size of the unencoded video is Each  experiments on HEVC-encoded video, as the size of the unencoded video is up to 250%+ larger than its encoded counterpart.  An alternate format is HEVC-encoded video MPEG-4 pre-muxed as DASH-compatible fragments, which would allow us to use the initialization segment as an index and potentially improving query performance.  However, investigating that experiment was beyond the scope of this project.**
+We elected to leave the tiles as HEVC-encoded video, as the size of the unencoded video is up to 250%+ larger than its encoded counterpart.  An alternate format is HEVC-encoded video MPEG-4 pre-muxed as DASH-compatible fragments, which would allow us to use the initialization segment as an index and potentially improving query performance.  However, investigating that experiment was beyond the scope of this project.
 
 ## Systems Overview
 We investigated data storage and retrieval on the file system, as well as two array-based database management systems: [SciDB](http://www.paradigm4.com/try_scidb/) and [TileDB](http://istc-bigdata.org/tiledb/).  We chose to focus on array-based database systems because they allow easy storage and retrieval of particular dimensions and ranges.  Their query languages are also well-suited to the workload needed to process video data for VR applications (e.g., streaming video by time and point queries for augmented reality).
@@ -53,7 +53,7 @@ The experiments we performed were:
 3. Throughput of 9mbps tiles
 
 ## Results
-Overall, TileDB with overflow pages seems to be the most efficient method for reading of 360 video data, but the file system is more efficient in terms of writing and throughput of tiles.  We detail the results of our three experiments below.
+Overall, TileDB with overflow pages and the file system using tiles stored in individual files are approximately equal in efficiency to each other and more efficient than any other method we tested. We detail the results of our three experiments below.
 
 ### Experiment 1:
 The first experiment was looking at reading tiles of different bitrates.  For the graphs below, the y axis corresponds to the time in seconds, and the x axis corresponds to the number of files at each of two bitrates (50kbps and 9mbps).
@@ -84,10 +84,11 @@ Finally, we looked at the throughput of the 9mbps tiles.  Here, the y axis is th
 
 ![Throughput of 9mbps Tiles](images/throughput.png)
 
-The file system had the highest throughput when reading tiles stored in individual files.  TileDB without overflow pages slightly outperformed TileDB with them in this case, and both were more efficient than the file system methods.  SciDB had the lowest throughput by far.
+Finally, we compared the throughput, in tiles per second, of the different systems. As you can see, aside from the SciDB and padded file system method, all throughputs were approximately the same.  We think any differences between those bars are just due to random amazon AWS issues.  Those methods all between 95 and 100 percent of our IO bandwidth, suggesting that for those methods, our efficiency was consistently IO bound, so their similar throughputs make sense. 
+
 
 ## Conclusions 
-We found that SciDB is less efficient by far than either TileDB or the file system, so should likely not be used for storing and retrieving data.  ileDB using overflow pages outperformed TileDB without them for writing and reading, but was slightly less efficient in terms of throughput.  The file system using tiles stored in individual files was more efficient than any other method in terms of writing and throughput.
+We found that SciDB is less efficient by far than either TileDB or the file system for reading, writing, and throughput, so should likely not be used for storing and retrieving data.  TileDB using overflow pages outperformed TileDB without them for writing and reading.  The file system using tiles stored in individual files consistently outperformed the other file-system-based methods, and was approximately equal to TileDB with overflow pages for everything other than reading.
 
 One thing to keep in mind is that we could have further optimized the file system read tests; had we done so, we probably would have matched TileDB in terms of efficiency.  However, doing so would have required much more time, to the point that TileDB would then likely be the better choice in terms of usability. 
 
