@@ -1,7 +1,7 @@
 # Array-Based Database System Performance for Virtual Reality Video Storage
 #### Brandon Haynes & Jessica Schroeder
 
-Recent advances in virtual reality (VR) has prompted the development of new applications ranging from gaming and entertainment to education and scientific visualization.  Spherical panoramic VR videos (a.k.a. *360 videos*) has become increasingly popular in many of these applications.  360 videos allow the user to view a spherical video scene from any angle.  Such videos allow for a truly immersive experience, as they allow the user to observe the scene as they would observe their surroundings in their everyday life.
+Recent advances in virtual reality (VR) have prompted the development of new applications ranging from gaming and entertainment to education and scientific visualization.  Spherical panoramic VR videos (a.k.a. *360 videos*) has become increasingly popular in many of these applications.  360 videos allow the user to view a spherical video scene from any angle.  Such videos allow for a truly immersive experience, as they allow the user to observe the scene as they would observe their surroundings in their everyday life.
 
 However, applications requiring 360 videos produce a need for rapid data streaming and storage at volumes far exceeding those found in 2D videos.  Supporting such high volumes of data requires maximum efficiency to provide the user with a seamless, high-quality portrayal of the created scene. 
 
@@ -9,7 +9,7 @@ In this article, we compare data storage and retrieval performance using TileDB,
 
 ## Video Data
 
-We decomposed each video used in the experiments into uniformally-sized segments, as is done in the [VisualCloud DBMS](http://visualcloud.cs.washington.edu).  We then temporally decomposed each segment into 20-second *tiles*.  Each tile is treated as an opaque binary value when read from or written to the target database system.
+We decomposed each video used in the experiments into uniformly-sized segments, as is done in the [VisualCloud DBMS](http://visualcloud.cs.washington.edu).  We then temporally decomposed each segment into 20-second *tiles*.  Each tile is treated as an opaque binary value when read from or written to the target database system.
 
 We elected to leave the tiles as HEVC-encoded video, as the size of the unencoded video is up to 250%+ larger than its encoded counterpart.  An alternate format is HEVC-encoded video MPEG-4 pre-muxed as DASH-compatible fragments, which would allow us to use the initialization segment as an index and potentially improving query performance.  However, investigating that experiment was beyond the scope of this project.
 
@@ -73,7 +73,7 @@ Next, we looked at writing tiles of different bitrates using our different syste
 
 ![Writing Tiles of Different Bitrates: All Systems](images/writing_Full.png)
 
-Again SciDB totally dominates the write times, especially for larger bitrates.  We again eliminated those results to view the other systems:
+Again, SciDB totally dominates the write times, especially for larger bitrates.  We again eliminated those results to view the other systems:
 
 ![Writing Tiles of Different Bitrates: Faster Systems](images/writing_Truncated.png)
 
