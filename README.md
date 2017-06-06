@@ -44,6 +44,8 @@ TileDB is a new array-based database management system that is currently used by
 ## Experiments
 To compare the performance of all three of our systems, we wrote scripts to read from and write to the file system (in C), TileDB (in C), and SciDB (in AFL).  We averaged the performance over at least 5 repetitions for each system, clearing caches between experiments to minimize any confounding factors associated with the operating system.  
 
+Each experiment was execute on a single-node `t2.xlarge` Amazon Elastic Compute Cloud (EC2) instance with 4 (virtual) cores and 16GiB RAM.  The node had an attached general-purpose elastic block storage (EBS) device with a maximum throughput of 160MB/s.
+
 We examined TileDB both using its native storage method ('TileDB' in our graphs below) and one using overflow pages, where we modified the DBMS to use external files for large binary values (>10mb) and inserted pointers to these files inside TileDB ('TileDB Overflow').  
 
 As described above, we investigated four methods based on the file system, including reading files when each tile is a separate file ('FS Separate'); reading files where the individual tiles were combined into a single file, separated by integer representations of the size of each file ('FS Combined'); reading files where the entire file containing all tiles at 50 megabits per second was read, along with random tiles at 9000 megabits per second ('FS Overflow'); and reading files where individual tiles were combined into a single file and padded to be equivalent sizes ('FS Padded').  
